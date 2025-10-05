@@ -1,7 +1,6 @@
 <?php
 
-session_start();
-require_once "../config.php";
+require_once __DIR__ . "/../helpers.php";
 
 $username = $_POST["username"];
 $email = $_POST["email"];
@@ -16,5 +15,5 @@ if (empty($username)) {
 }
 
 if (!empty($_SESSION["validation"])) {
-  header(header: "Location: " . BASE_URL . "/register.php" );
+  redirect("/register.php");
 }

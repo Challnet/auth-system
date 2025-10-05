@@ -1,3 +1,9 @@
+<?php
+
+require_once __DIR__ . "/src/helpers.php"
+
+?>
+
 <!DOCTYPE html>
 <html lang="ru" data-theme="light">
   <head>
@@ -14,15 +20,17 @@
       <h2>Регистрация</h2>
 
       <label for="name">
-        Имя
+        Username
         <input
           type="text"
           id="username"
           name="username"
           placeholder="alexandr_kushnir"
-          aria-invalid="true"
-          required
+          <?php hasError("username") ?>
         />
+
+        <small><?php getErrorMessage("username") ?></small>
+
       </label>
 
       <label for="email">
@@ -32,12 +40,12 @@
           id="email"
           name="email"
           placeholder="ivan@areaweb.su"
-          required
+          
         />
       </label>
 
       <label for="avatar"
-        >Изображение профиля
+        >Avatar
         <input type="file" id="avatar" name="avatar" />
       </label>
 
@@ -49,7 +57,6 @@
             id="password"
             name="password"
             placeholder="******"
-            required
           />
         </label>
 
@@ -60,7 +67,6 @@
             id="password_confirmation"
             name="password_confirmation"
             placeholder="******"
-            required
           />
         </label>
       </div>
