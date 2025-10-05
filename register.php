@@ -26,10 +26,14 @@ require_once __DIR__ . "/src/helpers.php"
           id="username"
           name="username"
           placeholder="alexandr_kushnir"
-          <?php hasError("username") ?>
+          value="<?php echo getOldValue("username") ?>"
+          <?php addValidationErrorAttribute("username") ?>
         />
 
-        <small><?php getErrorMessage("username") ?></small>
+        <?php if (hasValidationError("username")): ?>
+          <small><?php getValidationErrorMessage("username") ?></small>
+        <?php endif; ?>
+
 
       </label>
 
@@ -39,29 +43,41 @@ require_once __DIR__ . "/src/helpers.php"
           type="text"
           id="email"
           name="email"
-          placeholder="ivan@areaweb.su"
-          
+          placeholder="alexandrkushnir02@gmail.com"
+          value="<?php echo getOldValue("email") ?>"
+          <?php addValidationErrorAttribute("email") ?>
         />
+
+        <?php if (hasValidationError("email")): ?>
+          <small><?php getValidationErrorMessage("email") ?></small>
+        <?php endif; ?>
+        
       </label>
 
       <label for="avatar"
-        >Avatar
+        >Desired user avatar
         <input type="file" id="avatar" name="avatar" />
       </label>
 
       <div class="grid">
         <label for="password">
-          Пароль
+          Password
           <input
             type="password"
             id="password"
             name="password"
             placeholder="******"
+            <?php addValidationErrorAttribute("password") ?>
           />
+
+        <?php if (hasValidationError("password")): ?>
+          <small><?php getValidationErrorMessage("password") ?></small>
+        <?php endif; ?>
+
         </label>
 
         <label for="password_confirmation">
-          Подтверждение
+          Password confirmation
           <input
             type="password"
             id="password_confirmation"
@@ -78,10 +94,10 @@ require_once __DIR__ . "/src/helpers.php"
         </label>
       </fieldset>
 
-      <button type="submit" id="submit" disabled>Продолжить</button>
+      <button type="submit" id="submit" disabled>Continue</button>
     </form>
 
-    <p>У меня уже есть <a href="/login.html">аккаунт</a></p>
+    <p>I've already had an <a href="index.php">account</a></p>
 
     <script src="assets/app.js"></script>
   </body>
