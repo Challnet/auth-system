@@ -2,31 +2,77 @@
 
 require_once __DIR__ . "/../helpers.php";
 
-$username = $_POST["username"];
-$email = $_POST["email"];
-$password = $_POST["password"];
-$passwordConfirmation = $_POST["password_confirmation"];
+$avatarPath = null;
 
-addOldValue("username", $username);
-addOldValue("email", $email);
+$username = $_POST["username"]  ?? null;
+$email = $_POST["email"]  ?? null;
+$password = $_POST["password"]  ?? null;
+$passwordConfirmation = $_POST["password_confirmation"]  ?? null;
+$avatar = $_FILES["avatar"]  ?? null;
 
 //Validation
 if (empty($username)) {
-  addValidationError("username", "Username is empty");
+  setValidationError("username", "Username is empty");
 }
 
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  addValidationError("email", "Email is incorrect");
+  setValidationError("email", "Email is incorrect");
 }
 
 if (empty($password)) {
-  addValidationError("password", "Password is empty");
+  setValidationError("password", "Password is empty");
 }
 
 if ($password !== $passwordConfirmation) {
-  addValidationError("password", "Paswords are not matched");
+  setValidationError("password", "Paswords are not matched");
+}
+
+if (!empty($avatar)) {
+  $types = [
+    "image/jpeg", 
+    "image/jpg", 
+    "image/png"
+  ];
+
+  if (!in_array($avatar["type"], $types)) {
+    setValidationError("avatar", "Avatar image must be only jpeg, jpg or png types");
+  }
+
+  if (($avatar["size"] / 1000000) >= 1) {
+    setValidationError("avatar", "Avatar image must be less than 1MB size");
+  }
 }
 
 if (!empty($_SESSION["validation"])) {
+  setOldValue("username", $username);
+  setOldValue("email", $email);
+
   redirect("/register.php");
 }
+
+// Avatar image uploading
+if (!empty($avatar)) {
+  $avatarPath = uploadFile($avatar, "avatar");
+}
+
+// PDO
+$pdo = getPDO();
+
+$query = "INSERT INTO users (username, email, avatar, password) VALUES (:username, :email, :avatar, :password)";
+$params = [
+  "username" => $username,
+  "email" => $email,
+  "avatar" => $avatarPath,
+  "password" => password_hash($password, PASSWORD_DEFAULT)
+];
+
+$stmt = $pdo->prepare($query);
+
+try {
+  $stmt->execute($params);
+} catch (Exception $error) {
+  die($error->getMessage());
+}
+
+// Redirect to Sign In page
+redirect("/index.php");

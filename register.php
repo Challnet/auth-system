@@ -1,23 +1,12 @@
 <?php
+  require_once __DIR__ . "/src/helpers.php";
 
-require_once __DIR__ . "/src/helpers.php"
-
+  checkGuest();
 ?>
+<?php require_once __DIR__ . "/src/views/partials/head.php" ?>
 
-<!DOCTYPE html>
-<html lang="ru" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <title>AreaWeb - авторизация и регистрация</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"
-    />
-    <link rel="stylesheet" href="assets/app.css" />
-  </head>
-  <body>
     <form class="card" action="./src/actions/register.php" method="post" enctype="multipart/form-data">
-      <h2>Регистрация</h2>
+      <h2>Sign Up</h2>
 
       <label for="name">
         Username
@@ -27,11 +16,11 @@ require_once __DIR__ . "/src/helpers.php"
           name="username"
           placeholder="alexandr_kushnir"
           value="<?php echo getOldValue("username") ?>"
-          <?php addValidationErrorAttribute("username") ?>
+          <?php echo setValidationErrorAttribute("username") ?>
         />
 
         <?php if (hasValidationError("username")): ?>
-          <small><?php getValidationErrorMessage("username") ?></small>
+          <small><?php echo getValidationErrorMessage("username") ?></small>
         <?php endif; ?>
 
 
@@ -45,18 +34,28 @@ require_once __DIR__ . "/src/helpers.php"
           name="email"
           placeholder="alexandrkushnir02@gmail.com"
           value="<?php echo getOldValue("email") ?>"
-          <?php addValidationErrorAttribute("email") ?>
+          <?php echo setValidationErrorAttribute("email") ?>
         />
 
         <?php if (hasValidationError("email")): ?>
-          <small><?php getValidationErrorMessage("email") ?></small>
+          <small><?php echo getValidationErrorMessage("email") ?></small>
         <?php endif; ?>
         
       </label>
 
-      <label for="avatar"
-        >Desired user avatar
-        <input type="file" id="avatar" name="avatar" />
+      <label for="avatar">
+        Desired user avatar
+        <input 
+          type="file" 
+          id="avatar" 
+          name="avatar"
+          <?php echo setValidationErrorAttribute("avatar") ?>
+        />
+
+        <?php if (hasValidationError("avatar")): ?>
+          <small><?php echo getValidationErrorMessage("avatar") ?></small>
+        <?php endif; ?>
+
       </label>
 
       <div class="grid">
@@ -67,11 +66,11 @@ require_once __DIR__ . "/src/helpers.php"
             id="password"
             name="password"
             placeholder="******"
-            <?php addValidationErrorAttribute("password") ?>
+            <?php echo setValidationErrorAttribute("password") ?>
           />
 
         <?php if (hasValidationError("password")): ?>
-          <small><?php getValidationErrorMessage("password") ?></small>
+          <small><?php echo getValidationErrorMessage("password") ?></small>
         <?php endif; ?>
 
         </label>
@@ -99,6 +98,4 @@ require_once __DIR__ . "/src/helpers.php"
 
     <p>I've already had an <a href="index.php">account</a></p>
 
-    <script src="assets/app.js"></script>
-  </body>
-</html>
+<?php require_once __DIR__ . "/src/views/partials/footer.php" ?>
