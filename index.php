@@ -1,7 +1,7 @@
 <?php
  
   require_once __DIR__ . "/src/helpers.php";
- 
+
   checkGuest();
 ?>
 <?php require_once __DIR__ . "/src/views/partials/head.php" ?>
@@ -34,7 +34,7 @@
       </label>
 
       <label for="password">
-        Пароль
+        Password
         <input
           type="password"
           id="password"
@@ -43,9 +43,9 @@
         />
       </label>
 
-      <button type="submit" id="submit">Продолжить</button>
+      <button type="submit" id="submit">Continue</button>
     </form>
 
-    <p>У меня еще нет <a href="./register.php">аккаунта</a></p>
+    <p>I havent't had an <a href="./register.php">account</a> yet</p>
 
 <?php require_once __DIR__ . "/src/views/partials/footer.php" ?>

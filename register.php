@@ -89,7 +89,7 @@
       <fieldset>
         <label for="terms">
           <input type="checkbox" id="terms" name="terms" />
-          Я принимаю все условия пользования
+          I accept all the terms
         </label>
       </fieldset>
 

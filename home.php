@@ -16,6 +16,10 @@ $user = findCurrentUser();
       />
       <h1>Hello, <?php echo $user["username"] ?>!</h1>
 
+      <?php if ($user["user_role_id"] === 3): ?>
+        <button role="button">Administrate</button>
+      <?php endif; ?>
+
       <form action="./src/actions/logout.php" method="post">
         <button role="button">Logout</button>
       </form>

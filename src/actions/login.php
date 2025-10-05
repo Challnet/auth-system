@@ -2,8 +2,23 @@
 
 require_once __DIR__ . "/../helpers.php";
 
+$user = null;
 $email = $_POST["email"] ?? null;
 $password = $_POST["password"] ?? null;
+
+$maxAttempts = 3;
+$lockoutTime = 60 * 5;
+
+if (isset($_SESSION["lock_time"]) && time() - $_SESSION["lock_time"] < $lockoutTime) {
+    $remaining = ceil(($lockoutTime - (time() - $_SESSION["lock_time"])) / 60);
+    setMessage("error", "Account temporarily locked. Try again in $remaining minutes.");
+    redirect("/");
+    exit;
+}
+
+if (!isset($_SESSION["attempts"])) {
+  $_SESSION["attempts"] = 0;
+}
 
 
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -13,20 +28,43 @@ if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
   redirect("/");
 }
 
+
 // Identification
 $user = findUser($email);
 
 if (!$user) {
-  setMessage("error", "The user's login attempt failed because the $email wasn't found");
+  $_SESSION["attempts"]++;
+
+  setMessage("error", "User not found. Attempt #{$_SESSION['attempts']} of $maxAttempts.");
+
+  if ($_SESSION["attempts"] >= $maxAttempts) {
+    $_SESSION['lock_time'] = time();
+    setMessage("error", "Too many failed attempts. Account locked for 5 minutes.");
+  }
+  
   redirect("/");
+  exit();
 }
+
 
 // Authentification
 if (!password_verify($password, $user["password"])) {
+  $_SESSION['attempts']++;
+
   setMessage("error", "Password is incorrect");
+  
+  if ($_SESSION["attempts"] >= $maxAttempts) {
+    $_SESSION['lock_time'] = time();
+    setMessage("error", "Too many failed attempts. Account locked for 5 minutes.");
+  }
+
   redirect("/");
 }
 
 // Authorization
 $_SESSION["user"]["id"] = $user["user_id"];
+
+unset($_SESSION["attempts"]);
+unset($_SESSION["lock_time"]);
+
 redirect("/home.php");
