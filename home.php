@@ -25,4 +25,12 @@ $user = findCurrentUser();
       </form>
     </div>
 
+    <?php 
+      if (!empty($_SESSION["validation"])) {
+        echo "<pre>";
+          print_r($_SESSION["validation"]);
+        echo "</pre>";
+      }
+    ?>
+
 <?php require_once __DIR__ . "/src/views/partials/footer.php" ?>

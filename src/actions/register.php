@@ -4,7 +4,7 @@ require_once __DIR__ . "/../helpers.php";
 
 $avatarPath = null;
 
-unset($_SESSION["validation"]);
+// unset($_SESSION["validation"]);
 
 $username = $_POST["username"]  ?? null;
 $email = $_POST["email"]  ?? null;
@@ -29,7 +29,7 @@ if ($password !== $passwordConfirmation) {
   setValidationError("password", "Paswords are not matched");
 }
 
-if (!empty($avatar)) {
+if (!empty($avatar) && $avatar["error"] === 0) {
   $types = [
     "image/jpeg", 
     "image/jpg", 
@@ -49,15 +49,22 @@ if (!empty($_SESSION["validation"])) {
   setOldValue("username", $username);
   setOldValue("email", $email);
 
-  echo "<pre>";
-    print_r($_SESSION["validation"]);
-  echo "</pre>";
+  // echo "<pre>";
+  //   print_r($avatar);
+  // echo "</pre>";
+  
 
-  // redirect("/register.php");
+if (!empty($_SESSION["validation"])) {
+      echo "<pre>";
+        print_r($_SESSION["validation"]);
+      echo "</pre>";
+    }
+
+  redirect("/register.php");
 }
 
 // Avatar image uploading
-if (!empty($avatar)) {
+if (!empty($avatar) && $avatar["error"] === 0) {
   $avatarPath = uploadFile($avatar, "avatar");
 }
 

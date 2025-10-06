@@ -6,9 +6,11 @@
   <h2>Enter verification code</h2>
   <label for="code">
     <input 
-      type="number" 
       name="code" 
+      type="text" 
       placeholder="6-digit code" 
+      pattern="\d{6}"
+      inputmode="numeric"
       maxlength="6" 
       <?php echo setValidationErrorAttribute("code") ?>
     />

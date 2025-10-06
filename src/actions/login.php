@@ -68,6 +68,7 @@ if (!password_verify($password, $user["password"])) {
 unset($_SESSION["attempts"]);
 unset($_SESSION["lock_time"]);
 
+
 // $_SESSION["user"]["id"] = $user["user_id"];
 // 2fa Authentification
 require_once __DIR__ . "/../mailer.php";
