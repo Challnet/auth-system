@@ -4,6 +4,8 @@ require_once __DIR__ . "/../helpers.php";
 
 $avatarPath = null;
 
+unset($_SESSION["validation"]);
+
 $username = $_POST["username"]  ?? null;
 $email = $_POST["email"]  ?? null;
 $password = $_POST["password"]  ?? null;
@@ -47,7 +49,11 @@ if (!empty($_SESSION["validation"])) {
   setOldValue("username", $username);
   setOldValue("email", $email);
 
-  redirect("/register.php");
+  echo "<pre>";
+    print_r($_SESSION["validation"]);
+  echo "</pre>";
+
+  // redirect("/register.php");
 }
 
 // Avatar image uploading
@@ -71,7 +77,7 @@ $stmt = $pdo->prepare($query);
 try {
   $stmt->execute($params);
 } catch (Exception $error) {
-  die($error->getMessage());
+  die("DB error: " . $error->getMessage());
 }
 
 // Redirect to Sign In page

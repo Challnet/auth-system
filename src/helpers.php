@@ -124,3 +124,11 @@ function checkGuest() {
     redirect("/home.php");
   }
 }
+
+// function send2FACode(string $email, int $code): void {
+//   $subject = "Your 2FA Code";
+//   $message = "Your verification code is: $code (valid for 5 minutes)";
+//   $headers = "From: no-reply@auth-system.local";
+
+//   mail($email, $subject, $message, $headers);
+// }

@@ -2,6 +2,9 @@
 
 require_once __DIR__ . "/../helpers.php";
 
+// unset($_SESSION["attempts"]);
+// unset($_SESSION["lock_time"]);
+
 $user = null;
 $email = $_POST["email"] ?? null;
 $password = $_POST["password"] ?? null;
@@ -59,12 +62,28 @@ if (!password_verify($password, $user["password"])) {
   }
 
   redirect("/");
+  exit();
 }
-
-// Authorization
-$_SESSION["user"]["id"] = $user["user_id"];
 
 unset($_SESSION["attempts"]);
 unset($_SESSION["lock_time"]);
 
-redirect("/home.php");
+// $_SESSION["user"]["id"] = $user["user_id"];
+// 2fa Authentification
+require_once __DIR__ . "/../mailer.php";
+
+// После успешной проверки пароля
+$code = random_int(100000, 999999);
+$_SESSION["2fa_code"] = $code;
+$_SESSION["2fa_user"] = $user["user_id"];
+$_SESSION["2fa_expires"] = time() + 300;
+
+if (!send2FACode($user["email"], $code)) {
+    setMessage("error", "Unable to send verification email. Try again later.");
+    redirect("/");
+}
+
+redirect("/verify-2fa.php");
+
+
+// redirect("/home.php");
